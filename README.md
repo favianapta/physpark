@@ -8,3 +8,17 @@
 # Import Initialize Create an RDD
 
 ![images]( images/import_Initialize_Create_an_RDD.png )
+
+# BroadCast
+  - membuat sebuah variabel yang dapat dipancarkan (broadcast) ke semua node di Spark cluster, yang berisi daftar angka dari 1 hingga 100
+
+![images]( images/BroadCast.png )
+
+# Accumulator
+  - Kode tersebut membuat sebuah akumulator di Spark dan menjalankan operasi foreach pada RDD dengan menambahkan setiap nilai RDD ke dalam akumulator tersebut
+  
+![images]( images/Accumulator.png )
+
+# PairRDD
+
+![images]( images/PairRDD.png )
