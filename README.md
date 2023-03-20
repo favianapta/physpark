@@ -1,6 +1,7 @@
 # physpark
 
 - Exploring the Spark Scala shell
+- Exploring the Spark Python Shell
 
 
 # Screenshoot
