@@ -5,9 +5,9 @@
   
 ![images]( images/Executing_system.png )
 
-# Import Initialize Create an RDD
+# System Commands Output
 
-![images]( images/import_Initialize_Create_an_RDD.png )
+- Belum
 
 # BroadCast
   - membuat sebuah variabel yang dapat dipancarkan (broadcast) ke semua node di Spark cluster, yang berisi daftar angka dari 1 hingga 100
@@ -22,3 +22,15 @@
 # PairRDD
 
 ![images]( images/PairRDD.png )
+
+# Log Analytics
+
+- Belum
+
+# Understanding RDDs
+
+- Belum
+
+# WordCount
+
+- Belum
