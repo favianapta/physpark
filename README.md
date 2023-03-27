@@ -7,7 +7,7 @@
 
 # System Commands Output
 
-- Belum
+![images]( images/SystemCommandsOutput.png )
 
 # BroadCast
   - membuat sebuah variabel yang dapat dipancarkan (broadcast) ke semua node di Spark cluster, yang berisi daftar angka dari 1 hingga 100
