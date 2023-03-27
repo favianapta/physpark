@@ -29,7 +29,7 @@
 
 # Understanding RDDs
 
-- Belum
+![images]( images/UnderstandingRDD.png )
 
 # WordCount
 
