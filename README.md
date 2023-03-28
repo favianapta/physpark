@@ -33,4 +33,4 @@
 
 # WordCount
 
-- Belum
+![images]( images/WordCount.png )
