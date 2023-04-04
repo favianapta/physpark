@@ -11,33 +11,18 @@
 
 ![images]( images/SystemCommandsOutput.png )
 
-# BroadCast
-
-![images]( images/BroadCast.png )
-
-   - broadcast <br>
-     Penjelasan :
-     ```sh
-     untuk mengirim variabel yang tidak berubah (immutable) ke setiap worker node hanya sekali, 
-     sehingga menghemat penggunaan memori dan waktu komputasi.
-     ```
-     
-   - list <br>
-     Penjelasan :
-     ```sh
-     tipe data di Python yang digunakan untuk menyimpan kumpulan data dalam satu variabel.
-     ```
-     
-   - range <br>
-     Penjelasan :
-     ```sh
-     fungsi bawaan di Python yang digunakan untuk membuat urutan bilangan bulat 
-     dengan parameter awal, akhir, dan increment.
-     ```
 
 # Accumulator
 
 ![images]( images/Accumulator.png )
+
+    * Code
+      ```sh
+      myaccum = sc.accumulator(0)
+      myrdd = sc.parallelize(range(1,100))
+      myrdd.foreach(lambda value: myaccum.add(value))
+      print myaccum.value
+      ```
 
    - sc <br>
      Penjelasan :
@@ -74,9 +59,98 @@
      ```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+# BroadCast
+
+![images]( images/BroadCast.png )
+
+  * Code
+    ```sh
+    broadcastVar = sc.broadcast(list(range(1, 100)))
+    broadcastVar.value
+    ```
+
+   - broadcast <br>
+     Penjelasan :
+     ```sh
+     untuk mengirim variabel yang tidak berubah (immutable) ke setiap worker node hanya sekali, 
+     sehingga menghemat penggunaan memori dan waktu komputasi.
+     ```
+     
+   - list <br>
+     Penjelasan :
+     ```sh
+     tipe data di Python yang digunakan untuk menyimpan kumpulan data dalam satu variabel.
+     ```
+     
+   - range <br>
+     Penjelasan :
+     ```sh
+     fungsi bawaan di Python yang digunakan untuk membuat urutan bilangan bulat 
+     dengan parameter awal, akhir, dan increment.
+     ```
+
+# Log Analytics
+
+![images]( images/LogAnalytics.png )
+
+  * Code
+    ```sh
+    # Get the lines from the textfile, create 4 partitions
+    access_log = sc.textFile("path/folder/anda", 4)
+
+    #Filter Lines with ERROR only
+    error_log = access_log.filter(lambda x: "ERROR" in x)
+
+    # Cache error log in memory
+    cached_log = error_log.cache()
+
+    # Now perform an action -  count
+    print "Total number of error records are %s" % (cached_log.count())
+
+    # Now find the number of lines with 
+    print "Number of product pages visited that have Errors is %s" % (cached_log.filter(lambda x: "product" in x).count())
+    ```
+
+   - textFile <br>
+     Penjelasan :
+     ```sh
+     untuk membaca file teks dan mengubahnya menjadi RDD (Resilient Distributed Dataset) di Spark.
+     ```
+     
+   - filter <br>
+     Penjelasan :
+     ```sh
+     untuk menyaring elemen RDD dengan kriteria tertentu dengan menggunakan sebuah fungsi lambda.
+     ```
+     
+   - cache <br>
+     Penjelasan :
+     ```sh
+     untuk menyimpan RDD di memori, sehingga RDD tersebut bisa digunakan 
+     kembali tanpa harus dibaca ulang dari sumbernya.
+     ```
+     
+   - count <br>
+     Penjelasan :
+     ```sh
+     untuk menghitung jumlah elemen dalam RDD. Fungsi ini merupakan tipe action di Spark, 
+     yang mengakibatkan Spark menjalankan komputasi dan mengembalikan hasil ke driver program.
+     ```
+
+
 # PairRDD
 
 ![images]( images/PairRDD.png )
+
+  * Code
+    ```sh
+    mylist = ["my", "pair", "rdd"]
+    myRDD = sc.parallelize(mylist)
+    myPairRDD = myRDD.map(lambda s: (s, len(s)))
+    myPairRDD.collect()
+    myPairRDD.keys().collect()
+    myPairRDD.values().collect()
+    ```
 
 - map <br>
      Penjelasan :
@@ -110,39 +184,42 @@
      ```
      
     
-# Log Analytics
-
-![images]( images/LogAnalytics.png )
-
-   - textFile <br>
-     Penjelasan :
-     ```sh
-     untuk membaca file teks dan mengubahnya menjadi RDD (Resilient Distributed Dataset) di Spark.
-     ```
-     
-   - filter <br>
-     Penjelasan :
-     ```sh
-     untuk menyaring elemen RDD dengan kriteria tertentu dengan menggunakan sebuah fungsi lambda.
-     ```
-     
-   - cache <br>
-     Penjelasan :
-     ```sh
-     untuk menyimpan RDD di memori, sehingga RDD tersebut bisa digunakan 
-     kembali tanpa harus dibaca ulang dari sumbernya.
-     ```
-     
-   - count <br>
-     Penjelasan :
-     ```sh
-     untuk menghitung jumlah elemen dalam RDD. Fungsi ini merupakan tipe action di Spark, 
-     yang mengakibatkan Spark menjalankan komputasi dan mengembalikan hasil ke driver program.
-     ```
 
 # Understanding RDDs
 
 ![images]( images/UnderstandingRDD.png )
+
+  * Code
+    ```sh
+    # Check Default Parallelism
+    sc.defaultParallelism
+
+    #Let's create a list, parallelize it and let's check the number of partitions. 
+    myList = ["big", "data", "analytics", "hadoop" , "spark"]
+    myRDD = sc.parallelize(myList)
+    myRDD.getNumPartitions()
+  
+    #To override the default parallelism, provide specific number of partitions needed while creating the RDD. In this case let's create the RDD with 6 partitions.
+    myRDDWithMorePartitions = sc.parallelize(myList,6)
+    myRDDWithMorePartitions.getNumPartitions()
+ 
+    #Let's issue an action to count the number of elements in the list.
+    myRDD.count()
+
+    #Display the data in each partition
+    myRDD.mapPartitionsWithIndex(lambda index,iterator: ((index, list(iterator)),)).collect()
+
+    #Increase number of partitions and display contents
+    mySixPartitionsRDD = myRDD.repartition(6)
+    mySixPartitionsRDD.mapPartitionsWithIndex(lambda index,iterator: ((index, list(iterator)),)).collect()
+
+    #Decrease number of partitions and display contents
+    myTwoPartitionsRDD = mySixPartitionsRDD.coalesce(2)
+    myTwoPartitionsRDD.mapPartitionsWithIndex(lambda index,iterator: ((index, list(iterator)),)).collect()
+
+    # Check Lineage Graph
+    print myTwoPartitionsRDD.toDebugString()
+    ```
 
    - defaultParallelism <br>
      Penjelasan :
@@ -186,6 +263,18 @@
 # WordCount
 
 ![images]( images/WordCount.png )
+
+  * Code
+    ```sh
+    from operator import add
+    lines = sc.textFile("/path/to/README.md")
+    counts = lines.flatMap(lambda x: x.split(' ')) \
+                  .map(lambda x: (x, 1)) \
+                  .reduceByKey(add)
+    output = counts.collect()
+    for (word, count) in output:
+        print("%s: %i" % (word, count))
+    ```
 
 - flatMap <br>
      Penjelasan :
